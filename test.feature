@@ -1,4 +1,8 @@
+# This is comment line
+@my_feature_tag
 Feature: Alarm
+	# Hello world!
+	@my_scenario_tag
 	Scenario: Waking is good
 		Given Florian is asleep
 		When the alarm rings
