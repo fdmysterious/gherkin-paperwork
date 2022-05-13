@@ -1,5 +1,9 @@
 # language: fr
 Fonctionnalité: Réveil matin
+
+	Cette fonctionnalité vérifie si un réveil matin
+	peut fonctionner ou non.
+
 	Scénario: Le réveil qui se passe bien
 		Etant donné que Florian soit endormi
 		Lorsque le réveille sonne

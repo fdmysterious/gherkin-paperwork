@@ -70,6 +70,13 @@ class DataTable_Row:
             cells    = [DataTable_Cell.from_dict(x) for x in data["cells"]]
         )
 
+    def simplify(self):
+        """
+        Helper function that iterates through the row data
+        """
+
+        return (map(lambda x: x.value, self.cells))
+
 @dataclass
 class DataTable:
     location: Location
@@ -85,6 +92,13 @@ class DataTable:
             location = Location(**data["location"]),
             rows     = [DataTable_Row.from_dict(x) for x in data["rows"]]
         )
+
+    def simplify(self):
+        """
+        Helper function that returns the table data as tuples.
+        """
+
+        return tuple(map(lambda x: x.simplify(), self.rows))
 
 
 # ┌────────────────────────────────────────┐

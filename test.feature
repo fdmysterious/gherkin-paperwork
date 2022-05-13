@@ -1,7 +1,10 @@
 # This is comment line
 @my_feature_tag
 Feature: Alarm
-	# Hello world!
+
+	This feature checks that an alarm can wether work or
+	not.
+
 	@my_scenario_tag
 	Scenario: Waking is good
 		Given Florian is asleep
