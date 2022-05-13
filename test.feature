@@ -11,3 +11,11 @@ Feature: Alarm
 		And Florian stays asleep
 		When 10m are spent
 		Then the Alarm stops
+
+	Scenario: Waking is complex
+		Given Florian is asleep
+		And the day is one of the following:
+			| Saturday |
+			| Sunday   |
+
+		Then Florian doesn't want to wake up

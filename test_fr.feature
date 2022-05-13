@@ -13,3 +13,11 @@ Fonctionnalité: Réveil matin
 		Alors le réveil continue de sonner
 		Lorsque 10min se sont écoulées
 		Alors le réveil s'éteint
+
+	Scénario: Le réveil est compliqué
+		Etant donné que Florian soit endormi
+		Lorsque nous sommes à un des jours suivants :
+			| Samedi   |
+			| Dimanche |
+
+		Alors Florian ne veut pas se réveiller.
