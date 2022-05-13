@@ -11,7 +11,6 @@ from gherkin.parser                 import Parser
 from gherkin_paperwork.feature_file import Feature, Scenario
 
 from tabulate                       import tabulate
-from textwrap                       import dedent
 
 if __name__ == "__main__":
     # Parse feature file
@@ -26,7 +25,7 @@ if __name__ == "__main__":
 
     if feature.description:
         print("")
-        print(dedent(feature.description).strip())
+        print(feature.description)
 
     for sc in feature.children:
         if isinstance(sc, Scenario):
@@ -34,7 +33,7 @@ if __name__ == "__main__":
             print(f"## **{sc.keyword.strip()}**: {sc.name}")
             if sc.description:
                 print("")
-                print(dedent(sc.description).strip())
+                print(sc.description)
             print("")
             # TODO # print examples
             

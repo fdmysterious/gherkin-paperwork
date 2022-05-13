@@ -9,6 +9,7 @@
 
 from dataclasses import dataclass, field
 from typing      import List
+from textwrap    import dedent
 
 # ┌────────────────────────────────────────┐
 # │ Generic dataclasses                    │
@@ -151,6 +152,7 @@ class Scenario:
     def from_dict(cls, data: dict):
         # Copy data and remove processed fields
         dd2   = data.copy()
+        del dd2["description"]
         del dd2["steps"   ]
         del dd2["location"]
         del dd2["tags"    ]
@@ -161,7 +163,12 @@ class Scenario:
         tags     = [Tag.from_dict(tag_desc)   for tag_desc  in data["tags" ]]
 
         # Create Scenario object
-        return cls(**dd2, location=location, steps=steps, tags=tags)
+        return cls(**dd2,
+            description = dedent(data["description"]),
+            location    = location,
+            steps       = steps,
+            tags        = tags
+        )
 
 
 # ┌────────────────────────────────────────┐
@@ -183,9 +190,10 @@ class Feature:
     def from_dict(cls, data):
         # Copy data and remove processed fields
         dd2 = data.copy()
-        del dd2["children"]
-        del dd2["location"]
-        del dd2["tags"    ]
+        del dd2["children"   ]
+        del dd2["description"]
+        del dd2["location"   ]
+        del dd2["tags"       ]
 
         # Process tags and location
         location = Location(**data["location"])
@@ -199,4 +207,9 @@ class Feature:
         children = [__process_child(c) for c in data["children"]]
 
         # Return final item
-        return cls(**dd2, location=location, tags=tags, children=children)
+        return cls(**dd2,
+            location    = location,
+            description = dedent(data["description"]),
+            tags        = tags,
+            children    = children
+        )
