@@ -41,7 +41,7 @@ if __name__ == "__main__":
             print("_Procedure_:")
             print()
             for st in sc.steps:
-                print(f"- {st.keyword.strip()} {st.text}")
+                print(f"- _{st.keyword.strip()}_ {st.text}")
                 if st.dataTable:
                     print()
                     data = st.dataTable.simplify()
