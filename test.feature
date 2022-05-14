@@ -15,6 +15,7 @@ Feature: Alarm
 		Then Florian wakes up
 		And Florian shuts the alarm down
 
+
 	Scenario: Waking is bad
 
 		Tests the error case
@@ -24,6 +25,7 @@ Feature: Alarm
 		And Florian stays asleep
 		When 10m are spent
 		Then the Alarm stops
+
 
 	Scenario: Waking is complex
 
@@ -35,3 +37,18 @@ Feature: Alarm
 			| Sunday   |
 
 		Then Florian doesn't want to wake up
+
+
+	Scenario Outline: Setup alarm
+
+		Another syntax for the previous scenario
+
+		Given Florian is asleep
+		Given the day is <day>
+		When the alarm rings
+		Then Florian doesn't want to wake up
+
+		Examples:
+			| day      |
+			| Saturday |
+			| Sunday   |
