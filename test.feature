@@ -52,3 +52,9 @@ Feature: Alarm
 			| day      |
 			| Saturday |
 			| Sunday   |
+
+	Scenario: Setup an alarm
+		Given the alarm is powered on
+		When I press the setup button
+		* I enter the date
+		Then the alarm is set up
