@@ -7,12 +7,18 @@ Feature: Alarm
 
 	@my_scenario_tag
 	Scenario: Waking is good
+
+		Tests the nominal case
+
 		Given Florian is asleep
 		When the alarm rings
 		Then Florian wakes up
 		And Florian shuts the alarm down
 
 	Scenario: Waking is bad
+
+		Tests the error case
+
 		Given Florian is asleep
 		When the alarm rings
 		And Florian stays asleep
@@ -20,6 +26,9 @@ Feature: Alarm
 		Then the Alarm stops
 
 	Scenario: Waking is complex
+
+		Tests some special cases
+
 		Given Florian is asleep
 		And the day is one of the following:
 			| Saturday |
