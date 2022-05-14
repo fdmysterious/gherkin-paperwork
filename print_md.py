@@ -70,5 +70,3 @@ if __name__ == "__main__":
                         tuple(ex.tableHeader.simplify()),
                         *tuple(map(lambda x: x.simplify(), ex.tableBody))
                     )))
-
-
