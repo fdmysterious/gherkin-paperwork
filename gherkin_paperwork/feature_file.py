@@ -36,6 +36,8 @@ class Tag:
         return cls(**dd2, location=location)
 
 
+
+
 # ┌────────────────────────────────────────┐
 # │ Data table                             │
 # └────────────────────────────────────────┘
@@ -103,6 +105,37 @@ class DataTable:
 
 
 # ┌────────────────────────────────────────┐
+# │ Examples for scenario outline          │
+# └────────────────────────────────────────┘
+
+@dataclass
+class Example:
+    id: int
+    keyword: str
+    location: Location
+    name: str
+    description: str
+    tags:  List[Tag]
+    tableHeader: List[DataTable_Row]
+    tableBody: List[DataTable_Row]
+
+    @classmethod
+    def from_dict(cls, data):
+        dd2 = data.copy()
+        del dd2["location"   ]
+        del dd2["tags"       ]
+        del dd2["tableHeader"]
+        del dd2["tableBody"  ]
+
+        return cls(**dd2,
+            location    = Location(**data["location"]),
+            tags        = [Tag.from_dict(tag_desc) for tag_desc in data["tags"]],
+            tableHeader = DataTable_Row.from_dict(data["tableHeader"]),
+            tableBody   = [DataTable_Row.from_dict(row_desc) for row_desc in data["tableBody"]]
+        )
+
+
+# ┌────────────────────────────────────────┐
 # │ Steps                                  │
 # └────────────────────────────────────────┘
 
@@ -144,7 +177,7 @@ class Scenario:
     location: Location
     name: str
     description: str
-    examples: List[any] # TODO #
+    examples: List[Example]
     steps: List[Step]
     tags: List[str]
 
@@ -156,6 +189,7 @@ class Scenario:
         del dd2["steps"   ]
         del dd2["location"]
         del dd2["tags"    ]
+        del dd2["examples"]
 
         # Process specific data fields
         location = Location(**data["location"])
@@ -167,7 +201,8 @@ class Scenario:
             description = dedent(data["description"]),
             location    = location,
             steps       = steps,
-            tags        = tags
+            tags        = tags,
+            examples    = [Example.from_dict(example_desc) for example_desc in data["examples"]]
         )
 
 
