@@ -16,6 +16,7 @@ Generate the example markdown file
 
 1. Install the required dependencies:
     .. code:: bash
+
        pip install gherkin
        pip install tabulate
 
