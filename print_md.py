@@ -8,6 +8,8 @@
 """
 
 from gherkin.parser                 import Parser
+from gherkin.dialect                import Dialect
+
 from gherkin_paperwork.feature_file import Feature, Scenario
 
 from tabulate                       import tabulate
@@ -18,6 +20,9 @@ if __name__ == "__main__":
 
     # Generate structured view from parser output
     feature = Feature.from_dict(parser_output["feature"])
+    
+    # Load dialect for feature
+    dialect = Dialect.for_name(feature.language)
 
     # Generate markdown text:
     print(f"{feature.name}")
@@ -39,10 +44,31 @@ if __name__ == "__main__":
             
             print("_Procedure_:")
             print()
+
+            ilvl = 0
             for st in sc.steps:
-                print(f"- _{st.keyword.strip()}_ {st.text}")
+                if st.keyword.strip() in ("*", *dialect.and_keywords):
+                    print(f"    - {dialect.and_keywords[1]} {st.text}")
+                else:
+                    print(f"- _{st.keyword.strip()}_ {st.text}")
+
                 if st.dataTable:
                     print()
                     data = st.dataTable.simplify()
                     print(tabulate(data, tablefmt="simple"))
                     print()
+
+            if sc.examples:
+                for ex in sc.examples:
+                    print()
+                    print(f"### **{ex.keyword}**: {ex.name}")
+                    if ex.description:
+                        print()
+                        print(ex.description)
+                    print()
+                    print(tabulate((
+                        tuple(ex.tableHeader.simplify()),
+                        *tuple(map(lambda x: x.simplify(), ex.tableBody))
+                    )))
+
+
