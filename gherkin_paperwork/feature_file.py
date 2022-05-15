@@ -207,6 +207,34 @@ class Scenario:
 
 
 # ┌────────────────────────────────────────┐
+# │ Background                             │
+# └────────────────────────────────────────┘
+
+@dataclass
+class Background:
+    id: int
+    keyword: str
+    location: Location
+    name: str
+    description: str
+    steps: List[Step]
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        dd2 = data.copy()
+        del dd2["location"]
+        del dd2["steps"   ]
+
+        location = Location(**data["location"])
+        steps    = [Step.from_dict(step_desc) for step_desc in data["steps"]]
+        
+        return cls(**dd2,
+            location = location,
+            steps    = steps
+        )
+
+
+# ┌────────────────────────────────────────┐
 # │ Feature                                │
 # └────────────────────────────────────────┘
 
@@ -238,6 +266,8 @@ class Feature:
         def __process_child(c):
             if "scenario" in c:
                 return Scenario.from_dict(c["scenario"])
+            elif "background" in c:
+                return Background.from_dict(c["background"])
 
         children = [__process_child(c) for c in data["children"]]
 

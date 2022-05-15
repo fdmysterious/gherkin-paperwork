@@ -5,6 +5,10 @@ Feature: Alarm
 	This feature checks that an alarm can wether work or
 	not.
 
+	Background:
+		Given the human begin named Florian
+		And some alarm
+
 	@my_scenario_tag
 	Scenario: Waking is good
 
