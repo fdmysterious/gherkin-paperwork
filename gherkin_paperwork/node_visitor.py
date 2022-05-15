@@ -10,6 +10,7 @@
 from .feature_file import (
     Feature,
     Scenario,
+    Background,
     Example,
     Step
 )
@@ -46,6 +47,9 @@ class NodeVisitor:
 
     def _process_scenario(self, sc: Scenario, **kwargs):
         pass
+    
+    def _process_background(self, bg: Background, **kwargs):
+        pass
 
     def _process_example(self, ex: Example, **kwargs):
         pass
@@ -63,6 +67,8 @@ class NodeVisitor:
         for child in feature.children:
             if isinstance(child, Scenario):
                 self._visit_scenario(child, **kwargs)
+            elif isinstance(child, Background):
+                self._visit_background(child, **kwargs)
     
 
     def _visit_scenario(self, sc: Scenario, **kwargs):
@@ -75,6 +81,13 @@ class NodeVisitor:
         # Visit examples if any
         for examples in sc.examples:
             self._visit_examples(examples, **kwargs)
+
+    def _visit_background(self, bg: Background, **kwargs):
+        self._process_background(bg, **kwargs)
+
+        # Visit steps
+        for step in bg.steps:
+            self._visit_step(step, **kwargs)
 
 
     def _visit_step(self, st: Step, **kwargs):

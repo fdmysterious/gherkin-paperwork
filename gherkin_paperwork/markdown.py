@@ -15,6 +15,7 @@
 from gherkin_paperwork.node_visitor import NodeVisitor
 from gherkin_paperwork.feature_file import (
     Scenario,
+    Background,
     Feature,
     Step,
     Example
@@ -47,6 +48,17 @@ class Markdown_NodeVisitor(NodeVisitor):
             print(sc.description, file=self.io)
         print("", file=self.io)
         print("_Procedure_: ", file=self.io)
+        print("", file=self.io)
+
+
+    def _process_background(self, bg: Background, **kwargs):
+        print("", file=self.io)
+        print(f"## _{bg.keyword.strip()}_: {bg.name}", file=self.io)
+        if bg.description:
+            print("", file=self.io)
+            print(bg.description, file=self.io)
+        print("", file=self.io)
+        print("_Checklist_:", file=self.io)
         print("", file=self.io)
 
 
