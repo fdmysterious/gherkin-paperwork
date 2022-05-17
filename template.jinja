@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Feature: {{ feature.name }}</title>
+	</head>
+
+	<body>
+		<h1>Feature: {{ feature.name }}</h1>
+		{% if feature.description %}
+		<div class="description">
+			<p>{{ feature.description }}</p>
+		</div>
+		{% endif %}
+
+		{% for child in feature.children %}
+			<h2>{{child.keyword}}: {{child.name}}</h2>
+			{% if child.description %}
+				<div class="description">
+					<p>{{ child.description }}</p>
+				</div>
+			{% endif %}
+			<div class="steps">
+				<p><strong>Procedure:</strong></p>
+				<ol>
+					{% for step in child.steps %}
+					<li><em>{{step.keyword}}</em> : {{step.text}}</li>
+					{% endfor %}
+				</ol>
+			</div>
+			{% if child.examples %}
+				{% for exple in child.examples %}
+				<div class="example">
+					<h2>{{ exple.name }}</h2>
+					{% if exple.description %}
+					<div class="description">
+						{{ exple.description }}
+					</div>
+
+					<div class="dataTable">
+						{{exple.tableHeader, exple.tableBody | examples_tabulate }}
+					</div>
+					{% endif %}
+				</div>
+				{% endfor %}
+			{% endif %}
+		{% endfor %}
+	</body>
+</html>

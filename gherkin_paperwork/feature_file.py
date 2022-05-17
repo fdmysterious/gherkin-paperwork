@@ -7,9 +7,12 @@
  May 2022
 """
 
-from dataclasses import dataclass, field
-from typing      import List
-from textwrap    import dedent
+from dataclasses    import dataclass, field
+from typing         import List
+from textwrap       import dedent
+
+from pathlib        import Path
+from gherkin.parser import Parser
 
 # ┌────────────────────────────────────────┐
 # │ Generic dataclasses                    │
@@ -278,3 +281,12 @@ class Feature:
             tags        = tags,
             children    = children
         )
+
+
+# ┌────────────────────────────────────────┐
+# │ Helpers                                │
+# └────────────────────────────────────────┘
+
+def from_file(fpath: Path):
+    fpath = Path(fpath)
+    return Feature.from_dict(Parser().parse(str(fpath))["feature"])
