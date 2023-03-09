@@ -7,9 +7,13 @@
  May 2022
 """
 
-from dataclasses import dataclass, field
-from typing      import List
-from textwrap    import dedent
+from dataclasses    import dataclass, field
+import logging
+from typing         import List
+from textwrap       import dedent
+
+from pathlib        import Path
+from gherkin.parser import Parser
 
 # ┌────────────────────────────────────────┐
 # │ Generic dataclasses                    │
@@ -152,6 +156,7 @@ class Step:
         # Copy data, parse location
         dd2 = data.copy()
         del dd2["location"]
+        del dd2["keywordType"]
 
         location  = Location(**data["location"])
         dataTable = None
@@ -204,6 +209,57 @@ class Scenario:
             tags        = tags,
             examples    = [Example.from_dict(example_desc) for example_desc in data["examples"]]
         )
+
+# ┌────────────────────────────────────────┐
+# │ Rule                                   │
+# └────────────────────────────────────────┘
+
+@dataclass
+class Rule:
+    id: int
+    keyword: str
+    location: Location
+    name: str
+    description: str
+    tags: List[str]
+    children: List[any]
+
+    @classmethod
+    def from_dict(cls, data: dict):
+
+        # Copy data and remove processed fields
+        dd2   = data.copy()
+        del dd2["description"]
+        del dd2["location"]
+        del dd2["tags"    ]
+        del dd2["children"]
+
+        # Process tags and location
+        location = Location(**data["location"])
+        tags     = [Tag.from_dict(tag_desc) for tag_desc in data["tags"]]
+
+        # print(data)
+
+        # Process children
+        def __process_child(c):
+            if "scenario" in c:
+                return Scenario.from_dict(c["scenario"])
+            elif "rule" in c:
+                return Rule.from_dict(c["rule"])
+            elif "background" in c:
+                return Background.from_dict(c["background"])
+
+        children = [__process_child(c) for c in data["children"]]
+
+
+        # Return final item
+        return cls(**dd2,
+            location    = location,
+            description = dedent(data["description"]),
+            tags        = tags,
+            children    = children
+        )
+
 
 
 # ┌────────────────────────────────────────┐
@@ -266,6 +322,8 @@ class Feature:
         def __process_child(c):
             if "scenario" in c:
                 return Scenario.from_dict(c["scenario"])
+            elif "rule" in c:
+                return Rule.from_dict(c["rule"])
             elif "background" in c:
                 return Background.from_dict(c["background"])
 
@@ -278,3 +336,12 @@ class Feature:
             tags        = tags,
             children    = children
         )
+
+
+# ┌────────────────────────────────────────┐
+# │ Helpers                                │
+# └────────────────────────────────────────┘
+
+def from_file(fpath: Path):
+    fpath = Path(fpath)
+    return Feature.from_dict(Parser().parse(str(fpath))["feature"])

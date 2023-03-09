@@ -32,17 +32,25 @@ class Markdown_NodeVisitor(NodeVisitor):
     # └────────────────────────────────────────┘
     
     def _process_feature(self, ft: Feature, **kwargs):
-        print(f"{ft.name}", file=self.io)
-        print("=" * len(ft.name), file=self.io)
+        print(f"## {ft.name}", file=self.io)
 
         if ft.description:
             print("", file=self.io)
             print(ft.description, file=self.io)
 
 
+    def _process_rule(self, rule: Step, **kwargs):
+        print("", file=self.io)
+        print(f"### {rule.name}", file=self.io)
+        
+        if rule.description:
+            print("", file=self.io)
+            print(rule.description, file=self.io)
+
+
     def _process_scenario(self, sc: Scenario, **kwargs):
         print("", file=self.io)
-        print(f"## _{sc.keyword.strip()}_: {sc.name}", file=self.io)
+        print(f"#### {sc.keyword.strip()}: {sc.name}", file=self.io)
         if sc.description:
             print("", file=self.io)
             print(sc.description, file=self.io)
@@ -53,7 +61,7 @@ class Markdown_NodeVisitor(NodeVisitor):
 
     def _process_background(self, bg: Background, **kwargs):
         print("", file=self.io)
-        print(f"## _{bg.keyword.strip()}_: {bg.name}", file=self.io)
+        print(f"#### _{bg.keyword.strip()}_: {bg.name}", file=self.io)
         if bg.description:
             print("", file=self.io)
             print(bg.description, file=self.io)
@@ -68,7 +76,7 @@ class Markdown_NodeVisitor(NodeVisitor):
 
         # Print step text
         if st.keyword in ("*", *kwargs["dialect"].and_keywords):
-            print(f"\t- _{kwargs['dialect'].and_keywords[1]}_ {st_text}", file=self.io)
+            print(f"\t- _{kwargs['dialect'].and_keywords[1]}_ {st_text}", file=self.io)
         else:
             print(f"- _{st.keyword.strip()}_ {st_text}", file=self.io)
 
@@ -81,7 +89,7 @@ class Markdown_NodeVisitor(NodeVisitor):
 
     def _process_example(self, ex: Example, **kwargs):
         print("", file=self.io)
-        print(f"### _{ex.keyword}_: {ex.name}", file=self.io)
+        print(f"##### _{ex.keyword}_: {ex.name}", file=self.io)
         if ex.description:
             print("", file=self.io)
             print(ex.description, file=self.io)
